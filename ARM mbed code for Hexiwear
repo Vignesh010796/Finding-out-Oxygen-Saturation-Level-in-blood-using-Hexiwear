@@ -1,0 +1,36 @@
+/*Hexiwear comes with lot of in-built sensors such as humidity,temperature,pressure,
+heart rate(MAX30101),haptic feedback,accelerometer,gyroscope and much more...!!
+This enables Hexiwear to be used for different applications such as smart watch & smarthome controller.
+Hexiwear has an in-built heart rate sensor(MAX30101) that is pre-configured to calculate the heart rate. 
+MAX30101 has 3 modes of operation
+1.Heart rate mode
+2.SPO2 mode
+3.Both
+Since several sensors are connected to the I2C bus it is neccessary to identify and segregate the part of max30101.
+It is done by enabling the mode and the sensor we need to activate*/
+
+#include "mbed.h"
+#include "MAX30101.h"
+
+
+DigitalOut led1(LED_BLUE);
+
+Serial pc(USBTX, USBRX);// Initialize Serial port
+
+MAX30101 SPO2(PTB1, PTB0);//
+
+int main() {
+    
+    pc.printf("MAX301010 sensor test....\r\n\r\n");
+    wait(0.5);
+    
+    SPO2.enable();
+    
+    while (1) {
+        led1 = !led1;
+        // Example data printing
+        pc.printf("ID 0x%02x\r\n", SPO2.getRevisionID());
+        
+        Thread::wait(500);
+    }
+}
